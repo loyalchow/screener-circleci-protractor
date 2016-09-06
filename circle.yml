@@ -1,0 +1,25 @@
+machine:
+  node:
+    version: 5.0.0
+
+dependencies:
+  override:
+    - npm install
+    # Install Screener CI Script
+    - wget https://s3-us-west-2.amazonaws.com/screener-files/ci/v2.1/screener-ci.zip
+    - unzip screener-ci.zip
+    # Install Screener Tunnel Client
+    - wget https://s3-us-west-2.amazonaws.com/screener-files/screener-tunnel/screener-tunnel-client-linux-amd64.zip
+    - unzip screener-tunnel-client-linux-amd64.zip
+
+test:
+  override:
+    # start tunnel
+    - ./screener-tunnel-client -apikey="$SCREENER_API_KEY" -host="$CIRCLE_BRANCH.127.0.0.1.xip.io:8080":
+        background: true
+    # start server
+    - npm start:
+        background: true
+    # run tests
+    - npm test
+    - ./screener-ci.sh $SCREENER_API_KEY $SCREENER_GROUP_ID $CIRCLE_BUILD_NUM
