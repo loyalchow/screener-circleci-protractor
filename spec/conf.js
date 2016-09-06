@@ -1,6 +1,6 @@
 exports.config = {
   seleniumAddress: 'http://hub.screener.io/wd/hub',
-  specs: ['spec.js'],
+  specs: ['test-spec.js'],
   capabilities: {
     browserName: 'chrome',
     build: process.env.CIRCLE_BUILD_NUM,
